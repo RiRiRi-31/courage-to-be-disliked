@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Bloom學習筆記｜AI治癒</title>
+<meta name="description" content="認知科學 × 百日拆書——由 Bloom 學習文檔編譯，附目錄與閱讀進度。">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;700;900&family=Noto+Serif+TC:wght@600;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+<style>
+/* 閱讀器專屬樣式 */
+.reader-shell{display:flex;min-height:100vh;padding-top:74px}
+.toc{width:300px;flex:none;border-right:1px solid var(--line);background:var(--bg2);padding:28px 0;position:sticky;top:74px;height:calc(100vh - 74px);overflow-y:auto}
+.toc h2{font-family:'Noto Serif TC',serif;font-size:1.05rem;padding:0 26px 14px;color:var(--gold)}
+.toc .part{padding:16px 26px 6px;color:var(--muted);font-size:.78rem;letter-spacing:.12em}
+.toc a{display:flex;gap:10px;align-items:baseline;padding:10px 26px;font-size:.88rem;color:var(--text);border-left:2px solid transparent;transition:all .2s}
+.toc a:hover{background:rgba(244,180,0,.06);color:var(--gold)}
+.toc a.active{border-left-color:var(--gold);background:rgba(244,180,0,.08);color:var(--gold)}
+.toc a .done{margin-left:auto;color:var(--gold);font-size:.75rem}
+.reader-main{flex:1;min-width:0;display:flex;flex-direction:column}
+.progress-bar{position:fixed;top:0;left:0;height:3px;background:var(--gold);z-index:60;transition:width .2s}
+.reader-body{max-width:720px;margin:0 auto;padding:48px 30px 30px;flex:1}
+.reader-body .part-label{color:var(--gold);font-size:.78rem;letter-spacing:.16em;margin-bottom:6px}
+.reader-body .ch-label{color:var(--muted);font-size:.82rem;margin-bottom:26px}
+.reader-body h1{font-family:'Noto Serif TC',serif;font-size:1.7rem;margin-bottom:8px}
+.reader-body h2{font-family:'Noto Serif TC',serif;font-size:1.3rem;margin:2em 0 .8em;border-bottom:1px solid var(--line);padding-bottom:8px}
+.reader-body h3{font-size:1.08rem;margin:1.6em 0 .6em;color:var(--gold-soft)}
+.reader-body blockquote{border-left:3px solid var(--gold);background:rgba(244,180,0,.05);padding:12px 20px;border-radius:0 10px 10px 0;color:var(--muted);margin:1.2em 0}
+.reader-body blockquote p{margin:.3em 0}
+.reader-body ul,.reader-body ol{padding-left:1.4em;margin:.8em 0}
+.reader-body li{margin:.35em 0}
+.reader-body hr{border:none;border-top:1px solid var(--line);margin:2em 0}
+.reader-body code{background:var(--card);padding:.1em .4em;border-radius:4px;font-size:.9em}
+.reader-body p{margin:.8em 0}
+.reader-actions{display:flex;gap:14px;justify-content:space-between;align-items:center;max-width:720px;margin:0 auto;padding:10px 30px 60px;flex-wrap:wrap}
+.reader-actions .nav-btns{display:flex;gap:12px}
+.btn-done{background:transparent;border:1px solid var(--gold-soft);color:var(--gold);border-radius:999px;padding:10px 22px;cursor:pointer;font-size:.9rem;font-family:inherit;transition:all .2s}
+.btn-done.read{background:var(--gold);color:#131722;font-weight:700}
+.reader-progress-note{color:var(--muted);font-size:.8rem}
+@media(max-width:900px){
+  .toc{position:fixed;left:-320px;z-index:70;transition:left .25s;box-shadow:8px 0 30px rgba(0,0,0,.4)}
+  .toc.open{left:0}
+  .toc-toggle{display:inline-block!important}
+}
+.toc-toggle{display:none;background:none;border:1px solid var(--line);color:var(--muted);border-radius:8px;padding:6px 12px;cursor:pointer;margin-right:12px}
+.toc-mask{display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:65}
+.toc-mask.show{display:block}
+</style>
+</head>
+<body>
+<div class="progress-bar" id="progressBar" style="width:0%"></div>
+
+<header class="nav">
+  <div class="nav-inner">
+    <div class="brand"><button class="toc-toggle" id="tocToggle">☰ 目錄</button>Bloom學習筆記<span>AI治癒</span></div>
+    <nav>
+      <a href="index.html">主頁</a>
+      <a href="index.html#episodes">分集</a>
+      <a class="nav-episodes" href="assets/book/Bloom學習筆記.epub" download>下載 EPUB</a>
+    </nav>
+  </div>
+</header>
+
+<div class="reader-shell">
+  <aside class="toc" id="tocPanel">
+    <h2>目錄</h2>
+    <div id="tocList"></div>
+  </aside>
+  <div class="toc-mask" id="tocMask"></div>
+  <main class="reader-main">
+    <div class="reader-body" id="readerBody"></div>
+    <div class="reader-actions">
+      <div class="nav-btns">
+        <button class="btn btn-ghost" id="prevBtn">← 上一篇</button>
+        <button class="btn btn-ghost" id="nextBtn">下一篇 →</button>
+      </div>
+      <button class="btn-done" id="doneBtn">☐ 標記讀完</button>
+    </div>
+    <p class="reader-progress-note" style="text-align:center;padding:0 30px 70px" id="progressNote"></p>
+  </main>
+</div>
+
+<footer class="footer">
+  <div class="wrap">
+    <p class="foot-brand">Bloom學習筆記 · 認知科學 × 百日拆書</p>
+    <p class="foot-small">© 2026 AI治癒 · 由 Bloom 學習文檔編譯 · 進度只存在你自己嘅瀏覽器</p>
+  </div>
+</footer>
+
+<script>
+const BOOK = [{"id": "ch01", "part": "第一部分 · 認知科學晨讀", "part_id": "cogsci", "file": "syllabus.md", "label": "課程總覽", "title": "認知科學 · Bloom 學習大綱", "body": "<h1>認知科學 · Bloom 學習大綱</h1>\n<blockquote>\n<p>這份大綱把原有的 66 個概念整理成一條可調整的學習路徑。\n學習深度：標準\n每次只推進一篇文檔；完成閱讀後，先提交反饋，再進行蘇格拉底式理解確認，才進入下一篇。</p>\n</blockquote>\n<h2>核心掌握項</h2>\n<p>完成本課題後，你將能夠：</p>\n<h3>一、大腦如何處理資訊</h3>\n<ul>\n<li>☑ 能夠用自己的話解釋認知負荷與工作記憶的限制，並判斷一項任務的主要負荷來源。</li>\n<li>☑ 能夠運用注意力殘留、心智模型與圖式，解釋自己在切換任務和理解新事物時的卡頓。</li>\n<li>☐ 能夠運用編碼特定性、間隔效應、提取練習與遺忘曲線，設計一個可持續的學習方法。</li>\n</ul>\n<h3>二、判斷與決策</h3>\n<ul>\n<li>☐ 能夠區分快速直覺與緩慢推理，並指出雙系統在日常決策中的分工。</li>\n<li>☐ 能夠辨認常見的捷思與認知偏誤，說明它們如何影響自己的判斷。</li>\n<li>☐ 能夠在面對沉沒成本、過度自信與規劃謬誤時，提出一個較可靠的檢查步驟。</li>\n</ul>\n<h3>三、情緒與自我調節</h3>\n<ul>\n<li>☐ 能夠用情緒評價、認知重評與情緒粒度，解釋「同一件事為何會產生不同感受」。</li>\n<li>☐ 能夠辨認反芻、憂慮迴避與戰逃僵反應，區分思考、保護與真正行動。</li>\n<li>☐ 能夠運用心理韌性、自我同情與情緒抑制的相關概念，設計一個不依靠自我責備的調整方式。</li>\n</ul>\n<h3>四、學習、身份與整合</h3>\n<ul>\n<li>☐ 能夠用習慣迴路、內在動機、自我效能與執行意圖，分析一個改變計畫為何能否持續。</li>\n<li>☐ 能夠用自我概念、自我差異、敘事自我與社會比較，辨認「我如何描述自己」對行動的影響。</li>\n<li>☐ 能夠運用後設認知、認知謙遜與預測處理，檢查自己是否真的理解，並把認知科學連接到日常使用 AI 的判斷。</li>\n</ul>\n<h2>不在本課題範圍內</h2>\n<ul>\n<li>不以背誦所有術語或學術研究史為目標。</li>\n<li>不取代心理治療、醫療診斷或專業諮詢。</li>\n<li>不要求一次讀完 66 個概念；學習速度由理解程度和反饋決定。</li>\n</ul>\n<h2>學習進度</h2>\n<table>\n<thead>\n<tr>\n<th>文檔</th>\n<th>覆蓋掌握項</th>\n<th>生成日期</th>\n</tr>\n</thead>\n<tbody>\n<tr>\n<td>01.md</td>\n<td>認知負荷與工作記憶的限制</td>\n<td>2026-09-08</td>\n</tr>\n<tr>\n<td>02.md</td>\n<td>注意力殘留、圖式與心智模型；切換任務與接不上新知識邏輯的原因</td>\n<td>2026-09-09</td>\n</tr>\n</tbody>\n</table>\n<blockquote>\n<p>目前狀態：已完成第 01 篇的閱讀與理解確認；第二篇已建立，等待夜幽閱讀及提交反饋。</p>\n</blockquote>"}, {"id": "ch02", "part": "第一部分 · 認知科學晨讀", "part_id": "cogsci", "file": "01.md", "label": "第 01 篇", "title": "認知負荷：腦內的桌面有多大", "body": "<h1>01 · 認知負荷：腦內的桌面有多大</h1>\n<blockquote>\n<p>前置知識：無\n難度：入門\n預計閱讀時間：8–10 分鐘</p>\n</blockquote>\n<h2>正文內容</h2>\n<p>我們常常把「做不來」理解成能力不足：記性不好、意志力不夠、專注力太差。但有時候，真正發生的事情很簡單——<strong>同一時間放在腦中的東西太多了</strong>。</p>\n<p>這就是認知負荷。它指的是工作記憶在處理資訊、理解內容和作出判斷時所承受的負擔。工作記憶可以想像成腦內一張不大的書桌：桌面上能同時攤開的紙張有限。當紙張太多，新的資料不是沒有價值，而是沒有地方放。</p>\n<h3>三種負荷</h3>\n<p>可以把認知負荷分成三部分：</p>\n<ol>\n<li><strong>內在負荷</strong>：事情本身的複雜程度。例如第一次理解「認知負荷」時，需要同時分辨工作記憶、注意力和任務難度。</li>\n<li><strong>外在負荷</strong>：呈現方式帶來的額外負擔。例如頁面太亂、說明跳來跳去，會讓你花力氣找路，而不是理解內容。</li>\n<li><strong>促進學習的負荷</strong>：真正用來建立理解、整理關係和形成記憶的努力。這種努力不是越多越好，而是要用在正確的地方。</li>\n</ol>\n<h3>為什麼「再努力一點」有時沒有用</h3>\n<p>假設你一邊回覆工作訊息，一邊看一段教學影片，同時還記住待會要做的三件事。你可能會覺得自己不夠專心，於是要求自己「再努力一點」。但如果書桌已經堆滿紙張，再加力氣不會讓桌面變大；你需要做的，可能是先收起其中幾張紙。</p>\n<p>所以學習或工作卡住時，可以先問：</p>\n<ul>\n<li>我是真的不懂，還是同時處理太多事情？</li>\n<li>困難來自內容本身，還是來自混亂的呈現方式？</li>\n<li>我現在的努力，是在建立理解，還是在不停切換和找資料？</li>\n</ul>\n<h3>一個可立即使用的做法</h3>\n<p>下次準備開始一件重要的事，可以先做「三格清桌」：</p>\n<ul>\n<li><strong>現在只做什麼？</strong> 把主要任務寫成一句話。</li>\n<li><strong>暫時不處理什麼？</strong> 把會分走注意力的事情移到旁邊。</li>\n<li><strong>完成的最小證據是什麼？</strong> 例如不是「學會工作記憶」，而是「能用自己的例子解釋工作記憶為何有限」。</li>\n</ul>\n<p>這不是降低要求，而是把有限的認知資源用在真正重要的地方。當桌面清出一小塊空間，思考才有機會開始。</p>\n<h2>思考題</h2>\n<ol>\n<li>最近有沒有一件事，你一直以為自己「不夠努力」，但其實可能是同時處理了太多任務？請描述當時桌面上有哪些「紙張」。</li>\n<li>在「內在負荷、外在負荷、促進學習的負荷」之中，你覺得自己最常被哪一種拖住？為什麼？</li>\n<li>如果明天只能替一件事清出一小塊腦內空間，你會先移走什麼？</li>\n</ol>\n<h2>你的反饋</h2>\n<blockquote>\n<p>請在這裡寫下你的問題、感悟、不理解的地方，或你希望下一篇深入探討的方向。讀完後可以直接在對話中告訴我「我讀完了」，再附上你的回答或感受。</p>\n</blockquote>"}, {"id": "ch03", "part": "第一部分 · 認知科學晨讀", "part_id": "cogsci", "file": "02.md", "label": "第 02 篇", "title": "注意力殘留與圖式：為什麼切換特別耗腦", "body": "<h1>02 · 注意力殘留與圖式：為什麼切換特別耗腦</h1>\n<blockquote>\n<p>前置知識：讀過 01（認知負荷與工作記憶）\n難度：入門–進階\n預計閱讀時間：10–12 分鐘</p>\n</blockquote>\n<hr/>\n<h2>上一篇思考題復盤</h2>\n<blockquote>\n<p>📝 本模組評估你對上一篇思考題的回答，並給出必要的解析。</p>\n</blockquote>\n<h3>你的回答評估</h3>\n<p><strong>第 1 題：✅ 找到了真實的例子。</strong></p>\n<p>你說最近學新知識時，常常發現腦接不上知識背後的邏輯，而你的解釋是：工作上太多東西要記，工作記憶已經沒有位置放新的東西。這正是認知負荷理論想說的重點——理解卡住，未必是能力問題，而是桌面已經攤滿了紙。</p>\n<p><strong>第 2 題：✅ 判斷正確，而且有具體證據。</strong></p>\n<p>你選了<strong>外在負荷</strong>：工作上資訊分散，要不停跳來跳去、在腦內重新整理，甚至有一部分記憶是重複的。這個判斷很準。「跳來跳去」本身就是外在負荷最典型的來源——力氣花在找路和重新組裝，而不是理解本身。而你注意到「重複性」也很敏銳：同一件事在不同地方以不同形式出現，每一次都要重新佔用一次桌面。</p>\n<p><strong>第 3 題：✅ 答案明確，而且藏著一個重要訊息。</strong></p>\n<p>你選擇先清走「工作上的部分記憶」，整理之後騰出空間，放你真正想放進腦裡的東西——「總之，不是工作這樣東西」。這句話值得留意：當你說想為自己保留一塊腦內空間時，你清楚知道現在那塊空間被什麼佔著。</p>\n<h3>正確答案</h3>\n<p><strong>第 1 題：</strong> 核心在於分清「不懂」和「沒有空間懂」。工作記憶有限，當它被工作任務佔滿，新知識即使有價值，也沒有位置被處理。解法不是加壓「再努力」，而是先減少同時攤開的紙張。</p>\n<p><strong>第 2 題：</strong> 外在負荷最常拖住「資訊分散、需要頻繁切換」的人。內在負荷來自事情本身複雜；外在負荷來自呈現和組織方式。前者要靠拆解，後者要靠整理。</p>\n<p><strong>第 3 題：</strong> 「三格清桌」的用法是：只做一件事、暫時放下其他、定義完成的最小證據。你的答案方向正確，下一篇會補一個關鍵技術——如何讓被放下的事情，不再自動爬回桌面。</p>\n<hr/>\n<h2>??? 解答</h2>\n<blockquote>\n<p>💬 上一篇中沒有 <code>???</code> 或 <code>？？？</code> 標註，直接進入新內容。</p>\n</blockquote>\n<hr/>\n<h2>正文內容</h2>\n<p>上一篇說工作記憶像一張小書桌。這一篇要回答你反饋裡真正碰到的兩個問題：</p>\n<ol>\n<li>為什麼<strong>跳來跳去</strong>那麼耗腦？</li>\n<li>為什麼新知識的<strong>背後邏輯</strong>有時接不上？</li>\n</ol>\n<h3>一、注意力殘留：切換之後，腦還留在上一件事</h3>\n<p>研究任務切換的學者 Sophie Leroy 發現了一個現象，叫做<strong>注意力殘留（attention residue）</strong>：</p>\n<blockquote>\n<p>當你從任務 A 切換到任務 B，你的注意力並沒有完全跟過來——有一部分仍然掛在 A 上面：未完成的部分、剛才沒回的訊息、還沒確認的細節。</p>\n</blockquote>\n<p>這解釋了你說的「跳嚟跳去」為什麼特別累。每一次切換，你不是只做眼前這件事，而是同時背著上一件事的殘影。切換五次，等於五個殘影疊在桌面上。外在負荷之所以重，不只是因為資訊多，而是因為<strong>每一次跳動都留下殘留物</strong>，而工作記憶從來沒有真正清空過。</p>\n<p>這也說明了為什麼「同時處理」往往比「一次一件」慢很多——不是道德勸說，是殘留物在實際扣掉你的可用空間。</p>\n<h3>二、圖式：腦內的打包系統</h3>\n<p>第二個概念是<strong>圖式（schema）</strong>。</p>\n<p>圖式是腦內的「打包檔案」：把一堆零散的資訊，捆成一個有結構的整體，讓你只需要記住檔案名，而不是每一張紙。</p>\n<ul>\n<li>新手面對一個情境，看到的是十幾條散亂的資訊，每一條都要佔用工作記憶。</li>\n<li>熟手看到同一情境，腦中自動浮出一個圖式，十幾條資訊已經打包成兩三個「資料夾」，桌面幾乎是空的。</li>\n</ul>\n<p>這就是為什麼同一份工作，做了幾年的人覺得輕鬆，新手卻覺得每一分鐘都在燒腦：不是熟手記性更好，而是他的腦裡已經建好了圖式，很多東西不再需要逐項記。</p>\n<h3>三、為什麼新知識的「背後邏輯」接不上</h3>\n<p>把兩個概念合起來，你反饋裡那個現象就有了解釋。</p>\n<p>學新東西時感覺「接不上背後的邏輯」，通常是因為：</p>\n<ul>\n<li>你腦中還<strong>沒有這個領域的圖式</strong>，所以每一個新概念都是散裝的，全部都要自己佔桌面；</li>\n<li>同時，工作上的事情留下<strong>注意力殘留</strong>，本來就不多的空間再被打折。</li>\n</ul>\n<p>散裝概念 + 折扣後的桌面 = 邏輯接不上。這不是你理解力不夠，是兩邊同時收走了你的資源。</p>\n<h3>四、對應的做法</h3>\n<p><strong>給注意力殘留：斷點備忘。</strong> 每次被迫離開一件事之前，花三十秒寫下「現在做到哪裡、下一步是什麼」。寫下來的動作，等於告訴腦：這件事已經有檔案了，不用繼續掛在桌上。殘留未必完全消失，但會明顯減輕。</p>\n<p><strong>給散裝概念：先搭骨架，再填細節。</strong> 學新領域時，先花一點時間搞清楚它的整體結構——這個領域大概分幾塊、我在學的是其中哪一塊。有了骨架，之後每個新概念都有一個「資料夾」可以放，不再散裝。這也是為什麼這門課一直先給你大綱，才進入每一篇。</p>\n<p><strong>給重複性記憶：外部容器。</strong> 你提到工作記憶裡有不少重複的東西。凡是會重複出現的資訊（待辦、流程、帳目節點），都適合放到一個固定的地方——清單、筆記、表格。腦用來理解和判斷，不用來反覆存放同樣的內容。這正是上一篇「三格清桌」的延伸：放出去的紙，要有一個固定的地方接住，不然它會自己爬回來。</p>\n<h3>小結</h3>\n<ul>\n<li>切換的代價不是零——<strong>注意力殘留</strong>讓你每次都背著上一件事。</li>\n<li><strong>圖式</strong>決定一件事佔多少桌面：沒有圖式就是散裝，有圖式就是打包。</li>\n<li>學新知識接不上邏輯，多半是「散裝概念」碰上「殘留打折的桌面」。</li>\n<li>對策：斷點備忘減殘留、先搭骨架建圖式、外部容器接住重複的東西。</li>\n</ul>\n<h2>思考題</h2>\n<ol>\n<li>你工作裡最常「跳來跳去」的是哪兩三件事？如果每次切換前寫三十秒斷點備忘，你估哪一次的切換最值得先做？</li>\n<li>在你熟悉的領域（例如補習行的運作），你能指出一個已經形成的圖式嗎——即是新手要逐項記、你看一眼就懂的那種打包？</li>\n<li>你說想把工作以外的東西放進腦裡。用「骨架」的角度看：你想為哪一個興趣或方向，先搭一個小小的圖式骨架？</li>\n</ol>\n<h2>你的反饋</h2>\n<blockquote>\n<p>請在這裡寫下你的問題、感悟、不理解的地方，或你希望下一篇深入探討的方向。讀完後可以直接在對話中告訴我「我讀完了」，再附上你的回答或感受。</p>\n</blockquote>"}, {"id": "ch04", "part": "第二部分 · 百日拆書", "part_id": "bairi", "file": "syllabus.md", "label": "課程總覽", "title": "百日拆書 · Bloom 學習大綱", "body": "<h1>百日拆書 · Bloom 學習大綱</h1>\n<blockquote>\n<p>這份大綱把原有的 100 本書單整理成十個主題模組。\n學習深度：標準\n這是一套以拆解、對話和遷移為主的閱讀課程，不要求先逐本讀完原書；每次只推進一篇文檔，閱讀後先提交反饋，再進行蘇格拉底式理解確認。</p>\n</blockquote>\n<h2>核心掌握項</h2>\n<p>完成本課題後，你將能夠：</p>\n<h3>一、先把自己接住</h3>\n<ul>\n<li>☑ 能夠從療癒性圖文書和生活故事中辨認「被看見、被接住」對自我理解的作用。</li>\n</ul>\n<h3>二、認識自己</h3>\n<ul>\n<li>☐ 能夠比較不同心理學作品如何解釋自卑、情緒、選擇與自我接納。</li>\n</ul>\n<h3>三、看見系統</h3>\n<ul>\n<li>☐ 能夠用行為經濟、統計與系統思考的概念，辨認個人選擇背後的環境力量。</li>\n</ul>\n<h3>四、人性與陰影</h3>\n<ul>\n<li>☐ 能夠透過文學人物和敘事，觀察人在壓力、孤獨與關係中的選擇，而不急於貼標籤。</li>\n</ul>\n<h3>五、時間與歷史</h3>\n<ul>\n<li>☐ 能夠把個人的困惑放回歷史、社會與生命有限性的尺度中重新理解。</li>\n</ul>\n<h3>六、語言與敘事</h3>\n<ul>\n<li>☐ 能夠辨認語言和故事如何塑造一個人的自我形象與世界觀。</li>\n</ul>\n<h3>七、科學與邊界</h3>\n<ul>\n<li>☐ 能夠用通俗的科學框架理解自然、身體、宇宙及知識的限制。</li>\n</ul>\n<h3>八、自我與關係</h3>\n<ul>\n<li>☐ 能夠把依附、愛、溝通與界線等概念轉化為可觀察的相處選擇。</li>\n</ul>\n<h3>九、未來與選擇</h3>\n<ul>\n<li>☐ 能夠在不確定環境中區分真正重要的選擇、可承受的風險與不必要的焦慮。</li>\n</ul>\n<h3>十、回到自己</h3>\n<ul>\n<li>☐ 能夠把前面各模組的洞見整合成一套更貼近自己的生活原則，而不是照抄任何一本書的答案。</li>\n</ul>\n<h2>不在本課題範圍內</h2>\n<ul>\n<li>不逐章複製或替代原書內容；文檔會以原創拆解、概念整理和生活連接為主。</li>\n<li>不要求完成所有原書的閱讀，亦不以閱讀數量作為成績。</li>\n<li>不把任何一本書當成唯一正確答案；不同作品之間的矛盾會保留給你思考。</li>\n</ul>\n<h2>學習進度</h2>\n<table>\n<thead>\n<tr>\n<th>文檔</th>\n<th>覆蓋掌握項</th>\n<th>生成日期</th>\n</tr>\n</thead>\n<tbody>\n<tr>\n<td>01.md</td>\n<td>從療癒性圖文書辨認被接住與自我理解的關係</td>\n<td>2026-09-08</td>\n</tr>\n<tr>\n<td>02.md</td>\n<td>分辨被看見、看清問題與自行作出選擇的需要；把迷惘拆成可承受的下一步</td>\n<td>2026-09-09</td>\n</tr>\n<tr>\n<td>03.md</td>\n<td>用領先指標評價早期試驗；區分學習目標與表現目標；以自我接納回應結果焦慮</td>\n<td>2026-09-09</td>\n</tr>\n</tbody>\n</table>\n<blockquote>\n<p>目前狀態：已完成第 01–02 篇的閱讀與理解確認；第三篇已建立，等待夜幽閱讀及提交反饋。</p>\n</blockquote>"}, {"id": "ch05", "part": "第二部分 · 百日拆書", "part_id": "bairi", "file": "01.md", "label": "第 01 篇", "title": "《今天也是傷痕纍纍》：先把自己接住", "body": "<h1>01 ·《今天也是傷痕纍纍》：先把自己接住</h1>\n<blockquote>\n<p>前置知識：無\n難度：入門\n預計閱讀時間：8–10 分鐘</p>\n</blockquote>\n<h2>正文內容</h2>\n<p>很多關於成長的內容，一開始就要求我們改變：變得積極、變得自律、變得更有勇氣。但有一類書不急著把人推向下一步，而是先承認一件事——<strong>有些日子，本身已經很辛苦了</strong>。</p>\n<p>《今天也是傷痕纍纍》最適合作為這條共讀路線的起點，不是因為它提供一套完整方法，而是因為它先做了一件重要的事：把那些通常會被我們藏起來的疲累、失望、委屈和狼狽，放到畫面與文字裡，讓它們可以被看見。</p>\n<h3>「被接住」不是被說服</h3>\n<p>當一個人很累時，「你要加油」未必真的有用。那句話可能沒有錯，但它太快越過了當下的感受。被接住比較像是：有人先承認你現在確實不容易，不要求你立刻證明自己仍然有用、仍然積極、仍然能夠振作。</p>\n<p>這裡有一個細微差別：</p>\n<ul>\n<li><strong>被說服</strong>：你應該想開一點，事情沒有那麼糟。</li>\n<li><strong>被接住</strong>：我看見你現在真的很累，這份累不需要先被辯解。</li>\n</ul>\n<p>前者急著改變你的看法，後者先讓你不用獨自承受自己的看法。當一個人不再需要花力氣掩飾「我其實撐得很辛苦」，才可能慢慢有餘力去想下一步。</p>\n<h3>療癒不是把傷痕抹掉</h3>\n<p>「療癒」很容易被理解成恢復成一個沒有問題的人。但更貼近生活的理解是：你仍然知道自己受過傷，卻不再需要把所有傷痕都當成失敗證據。</p>\n<p>一幅插畫、一句簡短的文字，之所以可能令人停下來，不一定是因為它說出了多麼深奧的道理，而是因為它替某種說不清楚的感受留了位置。你看到它時，可能會產生一種：「原來不只有我這樣。」</p>\n<p>這種共鳴不能替你解決生活，但它可以把孤單從「只有我不行」改成「這是一種人會經歷的狀態」。兩者都仍然辛苦，後者卻多了一點可以呼吸的空間。</p>\n<h3>為什麼從「接住自己」開始</h3>\n<p>如果一個人一開始就把自己當成需要修理的問題，所有改變都可能變成新的自我責備：今天沒有做到，就證明自己又失敗了；明明知道道理，卻還是難過，就證明自己不夠成熟。</p>\n<p>先接住自己，並不等於放棄改變。它只是把順序調整為：</p>\n<blockquote>\n<p>先承認我正在經歷什麼，再決定我想往哪裡走。</p>\n</blockquote>\n<p>這也是百日拆書的第一個入口。這裡不急著問「這本書教了我什麼」，而先問：「哪些感受終於有一個位置可以放下？」答案未必要漂亮，也不需要立即變成行動。</p>\n<h2>思考題</h2>\n<ol>\n<li>你最近有沒有一個時刻，最需要的不是建議，而是有人承認「這真的很累」？</li>\n<li>對你來說，「被接住」和「被鼓勵」有什麼不同？請用一個生活例子說明。</li>\n<li>如果今天不要求自己立刻變好，你會想先替哪一種感受留一個位置？</li>\n</ol>\n<h2>你的反饋</h2>\n<blockquote>\n<p>請在這裡寫下你的問題、感悟、不理解的地方，或你希望下一篇深入探討的方向。讀完後可以直接在對話中告訴我「我讀完了」，再附上你的回答或感受。</p>\n</blockquote>"}, {"id": "ch06", "part": "第二部分 · 百日拆書", "part_id": "bairi", "file": "02.md", "label": "第 02 篇", "title": "迷惘時先分清：我需要答案，還是需要被理解？", "body": "<h1>02 · 迷惘時先分清：我需要答案，還是需要被理解？</h1>\n<blockquote>\n<p>前置知識：能辨認自己的當下感受，並回顧一個最近的生活情境\n難度：入門\n預計閱讀時間：10–12 分鐘</p>\n</blockquote>\n<hr/>\n<h2>上一篇思考題復盤</h2>\n<blockquote>\n<p>📝 本模組評估你對上一篇思考題的回答，並給出必要的解析。</p>\n</blockquote>\n<h3>你的回答評估</h3>\n<p><strong>第 1 題：✅ 具體而且抓到重點。</strong></p>\n<p>你用自己問女朋友「應不應該做這件事」的情境作例子，並留意到她沒有急著替你下決定，而是用「不如試吓先啦」承認你當下的處境。這正好說明了：有時候，一句話的作用不是提供答案，而是讓人知道自己不用獨自面對不確定。</p>\n<p><strong>第 2 題：✅ 分辨得很清楚。</strong></p>\n<p>你指出，鼓勵自己其實也可以做到；但當一件事是第一次做、自己沒有方向感時，你需要的是有人明白你的處境。這個分別很重要：鼓勵通常把人推向行動，理解則先讓人不用急著證明自己已經準備好。</p>\n<p><strong>第 3 題：✅ 能夠替感受留下位置。</strong></p>\n<p>你選擇了「孤單感」，而且連接到自己一直不自覺壓抑負面情緒的經驗。這不是把孤單解釋成一個需要立刻消除的問題，而是先承認它確實存在，讓它可以被看見。</p>\n<h3>正確答案</h3>\n<p><strong>第 1 題：最近有沒有一個時刻，最需要的不是建議，而是有人承認「這真的很累」？</strong></p>\n<p>你的例子是：當你對下一步感到懷疑，問女朋友應不應該去做某件事時，她回應「不如試吓先啦」。這個回答沒有否定你的煩惱，也沒有假裝事情很簡單；它先承認你正處於沒有方向感的狀態。</p>\n<p><strong>第 2 題：對你來說，「被接住」和「被鼓勵」有什麼不同？</strong></p>\n<p>你的理解是：鼓勵自己未必需要依靠別人，但第一次做一件事時，因為缺少方向而感到不安，便會需要有人明白自己的處境。被鼓勵比較像獲得推動力；被接住則像是有人先陪你站在原地，確認你現在的感受並不奇怪。</p>\n<p><strong>第 3 題：如果今天不要求自己立刻變好，你會想先替哪一種感受留一個位置？</strong></p>\n<p>你選擇了孤單感。這個答案沒有要求自己馬上變得不孤單，而是先承認：有些時候，即使身邊有人，自己仍可能因為不想或不懂得表達負面情緒，而感到孤單。這正是「替感受留位置」的意思。</p>\n<hr/>\n<h2>??? 解答</h2>\n<blockquote>\n<p>💬 上一篇中沒有 <code>???</code> 或 <code>？？？</code> 標註，直接進入新內容。</p>\n</blockquote>\n<hr/>\n<h2>正文內容</h2>\n<p>你提到一個很細緻的分別：<strong>你未必缺少鼓勵，而是第一次面對某件事時，缺少一點方向感，也希望有人明白你的處境。</strong></p>\n<p>這表示「我應不應該做？」這句問題入面，可能同時混合了三種需要：</p>\n<h3>一、我想先被看見</h3>\n<p>這是情緒層面的需要。你可能不是要對方解釋人生，而是希望對方知道，你現在確實有懷疑、害怕、孤單，或者不知道怎樣開始。</p>\n<p>「我明白你點解會咁諗」有時比「你要有信心」更有用，因為前一句沒有要求你先改變感受。</p>\n<h3>二、我想有人幫我看清楚</h3>\n<p>這是理解層面的需要。當一件事是第一次做，你未必是不敢做，而是不知道自己還缺少甚麼資料：</p>\n<ul>\n<li>我真正不清楚的是做法，還是結果？</li>\n<li>我擔心的是失敗，還是別人怎樣看我？</li>\n<li>我是沒有方向，還是其實有方向，只是不敢承認自己想要甚麼？</li>\n</ul>\n<p>這些問題不是用一句「加油」就能解決的。有人願意聽你把混亂說出來，本身已經可以幫你把腦中的一團線攤開一點。</p>\n<h3>三、我需要自己作出選擇</h3>\n<p>這是行動層面的需要。別人可以理解你、陪你分析，甚至說「不如試吓先啦」，但最後仍然要由你決定：這件事值不值得你用時間、力氣和風險去試。</p>\n<p>因此，「被理解」不等於把決定交給別人。比較健康的順序可能是：</p>\n<blockquote>\n<p>先讓感受被看見，再把問題看清楚，最後由自己選擇下一步。</p>\n</blockquote>\n<h3>負面情緒不是命令，而是訊號</h3>\n<p>你提到自己因為原生家庭的原因，不知不覺間會壓抑負面情緒。這裡可以先分清兩件事：</p>\n<ul>\n<li><strong>情緒是訊號</strong>：它告訴你某些事情正在影響你，例如孤單、受壓、害怕失去，或者覺得自己沒有被理解。</li>\n<li><strong>情緒不是命令</strong>：感到害怕，不代表你一定不能做；感到孤單，也不代表你一定要立即找人填補它。</li>\n</ul>\n<p>如果情緒一出現就被壓回去，你可能只剩下一句模糊的「我好煩」或「我唔知點算」。當你願意替它命名，便多了一點選擇空間：我現在感到的是孤單，還是害怕？我需要的是陪伴、資料，還是一個可以試錯的開始？</p>\n<h3>把「試吓先」變成一個可承受的試驗</h3>\n<p>「試吓先」不等於不經思考地衝出去，也不等於保證一定成功。它可以是一個<strong>可逆、細小、能夠取得新資料的行動</strong>。</p>\n<p>例如，不要直接問自己「我應不應該轉換整條人生方向」，可以先問：</p>\n<ul>\n<li>我能不能先花一個晚上了解這件事的實際要求？</li>\n<li>我能不能先做一個最小版本，而不是一次過承擔全部結果？</li>\n<li>我能不能先設定一個檢查時間，試過之後再決定是否繼續？</li>\n</ul>\n<p>這樣做不是逃避選擇，而是把一個太大的問題，拆成自己目前有能力承受的下一步。方向感有時不是坐在原地想很久才出現，而是在一個小型試驗之後，從新得到的資料裡慢慢形成。</p>\n<h3>一個「迷惘四格」</h3>\n<p>下次你發現自己又在問「我應不應該做」，可以先寫四句：</p>\n<ol>\n<li><strong>我現在感受到：</strong> ______</li>\n<li><strong>我最擔心的是：</strong> ______</li>\n<li><strong>我還缺少的資料是：</strong> ______</li>\n<li><strong>我可以承受的最小試驗是：</strong> ______</li>\n</ol>\n<p>第一句不是要你分析自己，而是讓情緒有名字；第二句幫你分辨真正的風險；第三句把「沒有方向」轉成可以查清楚的問題；第四句則讓行動不必一次大到足以嚇退自己。</p>\n<p>你女朋友那句「不如試吓先啦」，未必是在替你保證結果。它比較像是向你表示：你不用先變得完全確定，才有資格開始。至於要試到哪裡、何時停下來、之後是否繼續，仍然可以由你慢慢決定。</p>\n<h2>思考題</h2>\n<ol>\n<li>下一次你問別人「我應不應該做」，你覺得自己當刻最需要的是：被看見、看清問題，還是幫助自己作決定？為甚麼？</li>\n<li>對你來說，「孤單感」出現時，甚麼情況會令它變得更重？甚麼又會讓你感到自己被明白，而不是被催促？</li>\n<li>請選一件你最近感到迷惘的事，嘗試用「迷惘四格」寫出一個可以承受的最小試驗。</li>\n</ol>\n<h2>你的反饋</h2>\n<blockquote>\n<p>請在這裡寫下你的問題、感悟、不理解的地方，或你希望下一篇深入探討的方向。讀完後可以直接在對話中告訴我「我讀完了」，再附上你的回答或感受。</p>\n</blockquote>"}, {"id": "ch07", "part": "第二部分 · 百日拆書", "part_id": "bairi", "file": "03.md", "label": "第 03 篇", "title": "試了之後：別讓短期結果替你的嘗試打分", "body": "<h1>03 · 試了之後：別讓短期結果替你的嘗試打分</h1>\n<blockquote>\n<p>前置知識：讀過 01、02 兩篇；有「迷惘四格」的使用經驗\n難度：入門–進階\n預計閱讀時間：10–12 分鐘</p>\n</blockquote>\n<hr/>\n<h2>上一篇思考題復盤</h2>\n<blockquote>\n<p>📝 本模組評估你對上一篇思考題的回答，並給出必要的解析。</p>\n</blockquote>\n<h3>你的回答評估</h3>\n<p><strong>第 1 題：✅ 非常清晰，而且比上一篇再進一步。</strong></p>\n<p>你說下次問人「我應不應該做」時，最需要的是有人幫你一起整理思緒，然後<strong>幫助你自己</strong>做決定，並且特別補了一句「決定權會留返喺我自己度」。這正是上一篇說的三種需要被整合的樣子：把別人當作梳理問題的幫手，而不是把決定外包出去。你還補充了原因——一個人想事情不會全面，需要第二個角度。這個理解完全到位。</p>\n<p><strong>第 2 題：✅ 對孤單感的觀察很準。</strong></p>\n<p>你指出孤單感在「不被人了解」的時候會更強烈，而且具體說出了你需要的了解是哪一種：對方真的了解過你在做什麼、知道你想這樣做的原因、並且會陪住你一齊做。這裡有一個值得記住的洞察——孤單往往不是因為身邊沒有人，而是因為沒有人真正走進過你正在做的事。你說得很準：「那樣會令到我覺得我是被人明白的，而不是只是孤單一人、在自言自語。」</p>\n<p><strong>第 3 題：✅ 敢於套用到自己身上，這是這格練習最好的用法。</strong></p>\n<p>你把「迷惘四格」直接用在自己身上：</p>\n<ol>\n<li>我現在感受到：迷茫。</li>\n<li>我最擔心的是：會太在意短時間內的結果。</li>\n<li>我還缺少的資料是：不清楚應該向哪個方向邁進。</li>\n<li>我可以承受的最小試驗是：先開一個賬號，試行兩三個月，看成果怎樣。</li>\n</ol>\n<p>四格都填得出來，說明你已經可以把「好煩、唔知點算」拆成看得見的問題。第 2 格尤其有價值——你預先知道自己容易在意的不是事情本身，而是結果的快慢。這正是本篇要處理的主題。</p>\n<h3>正確答案</h3>\n<p>這些題目沒有標準答案，你的回答已經達到練習目的。唯一值得補充的是第 3 格的用法：當「缺少的方向」寫出來之後，下一步通常不是立刻想通「方向是什麼」，而是列出「可以去哪裡取得這個資料」。方向感很多時候是資料問題，不是意志力問題。</p>\n<hr/>\n<h2>??? 解答</h2>\n<blockquote>\n<p>💬 上一篇中沒有 <code>???</code> 或 <code>？？？</code> 標註，直接進入新內容。</p>\n</blockquote>\n<hr/>\n<h2>正文內容</h2>\n<p>你在四格裡寫下了一個非常誠實的擔心：<strong>「會太在意短時間內的結果。」</strong></p>\n<p>這句話值得單獨拿出來講。因為一個「試行兩三個月」的計畫，最大的風險往往不是事情太難，而是中途檢查的時候——成果還沒長出來，你先把自己判了刑：果然不行、果然是我不夠好。這一篇就來拆這個風險。</p>\n<h3>兩三個月的「成果」，多數是滯後指標</h3>\n<p>可以把測量分成兩種：</p>\n<ul>\n<li><strong>滯後指標（Lagging Indicators）</strong>：最終呈現的結果，例如收入、粉絲數、有沒有人買帳。它們由大量累積造成，而且天生<strong>來得慢</strong>。</li>\n<li><strong>領先指標（Leading Indicators）</strong>：可以每天或每週統計的過程量，例如投出了多少次、寫了多少篇、跟多少人聊過、學到了什麼之前不知道的東西。</li>\n</ul>\n<p>兩三個月的時間，滯後指標通常還在「沉澱期」，看不出什麼。如果你在這個階段用它評分，你量的其實不是這件事的潛力，而是時間還沒到。真正該在早期看的是領先指標：我有沒有持續做？我做出來的東西有沒有比上一次好？我的判斷有沒有因為實作而改變？</p>\n<p>一個簡單的檢查句：</p>\n<blockquote>\n<p>「這個月的我，有沒有比上個月的我多知道一些東西？」</p>\n</blockquote>\n<p>如果有，試驗就在產出，即使外面的成果還沒顯現。</p>\n<h3>為什麼結果會那麼刺痛：自我價值綁上了成績單</h3>\n<p>「太在意結果」通常不是性格缺陷，而是一個綁定錯誤：把「我做得好不好」和「我是不是一個夠好的人」綁在了一起。結果不好，就變成我不夠好——這才是最痛的部分。</p>\n<p>心理學家 Carol Dweck 對此有一個經典區分：</p>\n<ul>\n<li><strong>表現目標（Performance Goal）</strong>：證明自己有能力。一旦遇到可能失敗的情境，就會想逃避，因為失敗會威脅到自我評價。</li>\n<li><strong>學習目標（Learning Goal）</strong>：讓自己變得更有能力。失敗只是資料，不是審判。</li>\n</ul>\n<p>第一次做一件事，本能上很容易設成表現目標——因為你在向自己證明「我也可以」。但兩三個月的新嘗試，本質上只可能是學習目標的階段：你還在收集資料，還沒到能證明什麼的時候。提前用證明的標準考自己，就像考試第二天就要求放榜。</p>\n<h3>用阿德勒的方式接住結果：《被討厭的勇氣》裡的自我接納</h3>\n<p>你可能記得，這個概念跟你自己做過的 podcast 主題是同一棵樹。阿德勒心理學講的<strong>自我接納（self-acceptance）</strong>，不是「接認命、不用努力」，而是：</p>\n<blockquote>\n<p>接受「现在的自己」，然後在這個基礎上，決定能做什麼。</p>\n</blockquote>\n<p>它跟自我肯定不同：自我肯定是對著鏡子說「我很行」，明明做不到還暗示自己可以；自我接納是誠實承認「我現在就是剛起步、成果還看不出來」，然後問「在這個起點上，下一步能做什麼」。</p>\n<p>用在你的試驗上就是：兩三個月後如果成果不好，那是一個<strong>關於方法的資料點</strong>，不是一個<strong>關於你價值的判決</strong>。方法可以換、可以調，判決卻會讓人不敢再試。你要保護的，正是「還敢再試」這個東西。</p>\n<h3>給試驗預先寫一份「評分標準」</h3>\n<p>最實用的一步：在開始之前，先把「三個月後我會用什麼標準評這次試驗」寫下來。因為中途的你不冷靜，開始前的你相對客觀。</p>\n<p>例如你可以這樣寫（例子，請按你自己的情況改）：</p>\n<ol>\n<li><strong>投入度</strong>：我是否維持了預期的頻率？（而不是：有沒有爆）</li>\n<li><strong>能力增量</strong>：我學會了哪些之前不會的東西？</li>\n<li><strong>訊號</strong>：有沒有出現任何一點點反應——哪怕很小、很慢？</li>\n<li><strong>意願</strong>：三個月後，我是「不想做了」，還是「想換個做法繼續」？</li>\n</ol>\n<p>注意這四條全是領先指標加上主觀意願，沒有一條是「成果好不好」。到檢查日那天，你先回答這四條，再看外面的結果——而且看的時候提醒自己：那只是第一個數據點，不是曲線的全貌。</p>\n<p>還有一個小技巧，把「放棄」跟「調整」分開：如果結論是換方法但繼續做，那叫迭代，不叫失敗。只有「徹底不做了，而且因為覺得自己不行」才是試驗真正輸掉的方式。</p>\n<h3>回到你寫的那格</h3>\n<p>你寫的最小試驗是：先開一個賬號，試行兩三個月，看成果怎樣。這已經是一個很小、可承受的開始。本篇想加的只是兩個改動：</p>\n<ul>\n<li>把「看成果」改成「看四條預先寫好的標準＋成果當參考」。</li>\n<li>在日曆上先寫好檢查日期。中途想放棄或想自責時，回答一句：「檢查日還沒到，現在的判決無效。」</li>\n</ul>\n<p>方向不是想出來的，是試出來再修出來的。你已經把問題縮到「兩三個月」這麼小了，剩下的，是讓自己在這兩三個月裡不被尚未到來的結果嚇退。</p>\n<h2>思考題</h2>\n<ol>\n<li>如果三個月後檢查，你認為自己最容易用哪句話攻擊自己？（例如「果然我三分鐘熱度」）預先寫下來，然後想想：這句話是資料，還是判決？</li>\n<li>對你想做的這件事，你認為什麼才是最誠實的領先指標——你自己每星期真做得到、又能反映投入的那些量？</li>\n<li>「被人了解地做一件事」對你很重要。這次試驗裡，你打算讓誰（包括我）在過程中看著它？打算多久讓對方看一次？</li>\n</ol>\n<h2>你的反饋</h2>\n<blockquote>\n<p>請在這裡寫下你的問題、感悟、不理解的地方，或你希望下一篇深入探討的方向。讀完後可以直接在對話中告訴我「我讀完了」，再附上你的回答或感受。</p>\n</blockquote>"}];
+const LS_READ = 'bloom-book-read';
+const LS_CUR = 'bloom-book-current';
+
+function getRead(){ try{return new Set(JSON.parse(localStorage.getItem(LS_READ)||'[]'))}catch(e){return new Set()} }
+function setRead(s){ localStorage.setItem(LS_READ, JSON.stringify([...s])) }
+
+const tocList = document.getElementById('tocList');
+let tocHtml = '', curPart = null;
+BOOK.forEach((ch,i)=>{
+  if(ch.part!==curPart){ tocHtml += '<div class="part">'+ch.part+'</div>'; curPart=ch.part; }
+  tocHtml += '<a href="#" data-i="'+i+'" id="toc-'+i+'">'+ch.label+' · '+ch.title+'<span class="done" style="display:none">✓</span></a>';
+});
+tocList.innerHTML = tocHtml;
+
+let current = Math.min(parseInt(localStorage.getItem(LS_CUR)||'0',10)||0, BOOK.length-1);
+
+function render(i){
+  current = i;
+  localStorage.setItem(LS_CUR, String(i));
+  const ch = BOOK[i];
+  const body = document.getElementById('readerBody');
+  body.innerHTML = '<p class="part-label">'+ch.part+'</p><h1>'+ch.label+' · '+ch.title+'</h1><p class="ch-label">'+ch.file+'</p>'+ch.body;
+  const read = getRead();
+  const btn = document.getElementById('doneBtn');
+  btn.classList.toggle('read', read.has(i));
+  btn.textContent = read.has(i) ? '✓ 已讀完' : '☐ 標記讀完';
+  document.getElementById('prevBtn').disabled = (i===0);
+  document.getElementById('nextBtn').disabled = (i===BOOK.length-1);
+  document.querySelectorAll('.prev-next-disabled');
+  document.getElementById('prevBtn').style.opacity = i===0?'.4':'1';
+  document.getElementById('nextBtn').style.opacity = i===BOOK.length-1?'.4':'1';
+  // toc active
+  document.querySelectorAll('#tocList a').forEach(a=>a.classList.remove('active'));
+  const a = document.getElementById('toc-'+i);
+  if(a){ a.classList.add('active'); a.querySelector('.done').style.display = read.has(i)?'inline':'none'; }
+  const doneCount = read.size;
+  const pct = Math.round(doneCount/BOOK.length*100);
+  document.getElementById('progressBar').style.width = pct+'%';
+  document.getElementById('progressNote').textContent = '全書 '+BOOK.length+' 章 · 已讀 '+doneCount+' 章（'+pct+'%）· 進度自動記低，下次打開會返去上次讀嘅位置';
+  window.scrollTo({top:0});
+  // mobile close toc
+  document.getElementById('tocPanel').classList.remove('open');
+  document.getElementById('tocMask').classList.remove('show');
+}
+
+tocList.addEventListener('click', e=>{
+  const a = e.target.closest('a[data-i]');
+  if(!a) return; e.preventDefault();
+  render(parseInt(a.dataset.i,10));
+});
+document.getElementById('prevBtn').onclick = ()=> current>0 && render(current-1);
+document.getElementById('nextBtn').onclick = ()=> current<BOOK.length-1 && render(current+1);
+document.getElementById('doneBtn').onclick = ()=>{
+  const s = getRead();
+  if(s.has(current)) s.delete(current); else s.add(current);
+  setRead(s); render(current);
+};
+document.getElementById('tocToggle').onclick = ()=>{
+  document.getElementById('tocPanel').classList.toggle('open');
+  document.getElementById('tocMask').classList.toggle('show');
+};
+document.getElementById('tocMask').onclick = ()=>{
+  document.getElementById('tocPanel').classList.remove('open');
+  document.getElementById('tocMask').classList.remove('show');
+};
+
+render(current);
+</script>
+</body>
+</html>
