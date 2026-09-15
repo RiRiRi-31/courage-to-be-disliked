@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>resonance｜Podcast</title>
+<meta name="description" content="在文字裡找答案，在溝通裡學會愛。">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;700;900&family=Noto+Serif+TC:wght@600;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body class="episode-page">
+
+<header class="nav">
+  <div class="nav-inner">
+    <a class="brand" href="index.html">ricky.inresonance_ <span>｜ 閱讀 • 成長 • 對話 ☕️</span></a>
+    <nav>
+      <a href="index.html#episodes">分集</a>
+      <a href="index.html#hosts">主持人</a>
+      <a href="index.html#about">關於</a>
+    </nav>
+  </div>
+</header>
+
+<main class="episode-detail-section">
+  <div class="wrap">
+    <a class="back-link" href="index.html#episodes">← 返回分集</a>
+    <article class="episode-detail" id="episodeDetail">
+      <div class="episode-detail-head">
+        <div class="ep-num" id="episodeNumber"></div>
+        <div>
+          <p class="detail-eyebrow">resonance Podcast</p>
+          <h1 id="episodeTitle"></h1>
+          <p class="ep-meta" id="episodeMeta"></p>
+        </div>
+      </div>
+      <p class="episode-detail-intro" id="episodeIntro"></p>
+      <audio id="episodePlayer" controls preload="metadata"></audio>
+      <div class="ep-quote">
+        <p id="episodeQuote"></p>
+        <span id="episodeQuoteNote"></span>
+      </div>
+      <section class="episode-chapter-section">
+        <h2 class="sec-title">本集章節</h2>
+        <p class="sec-sub">點擊任何一章，播放器會直接跳到該段落。</p>
+        <ol class="chapter-list" id="chapterList"></ol>
+      </section>
+    </article>
+  </div>
+</main>
+
+<footer class="footer">
+  <div class="wrap">
+    <p class="foot-brand">resonance · 閱讀 · 成長 · 對話</p>
+    <p class="foot-note">在文字裡找答案，在溝通裡學會愛。</p>
+    <p class="foot-small">© 2026 · 用心製作 · 每一集都是一個開始</p>
+  </div>
+</footer>
+
+<script src="episodes.js"></script>
+<script src="episode.js"></script>
+</body>
+</html>
