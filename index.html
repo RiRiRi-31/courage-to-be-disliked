@@ -40,41 +40,8 @@
 <section id="episodes" class="section">
   <div class="wrap">
     <h2 class="sec-title">分集</h2>
-    <p class="sec-sub">選擇一集，從今天開始一段屬於自己的對話。</p>
-
-    <article class="episode-card" data-episode="ep1">
-      <div class="ep-head">
-        <div class="ep-num">EP 01</div>
-        <div>
-          <h3>被討厭的勇氣：一堂關於自由的對話</h3>
-          <p class="ep-meta">雙主持 · 普通話 · 18 分 32 秒</p>
-        </div>
-      </div>
-      <audio controls preload="metadata" src="assets/ep1.mp3"></audio>
-      <div class="ep-quote">
-        <p>「今晚睡前，找一件你一直拿『過去』或『我的缺點』當藉口的事，把它寫下來，然後問自己一句：我這樣說，到底是在『面對』，還是在『保護自己不去行動』？」</p>
-        <span>—— 第一集結尾，留給你的一個小行動</span>
-      </div>
-      <h4 class="chapter-heading">第一集章節</h4>
-      <ol class="chapter-list episode-chapters" data-chapters="ep1"></ol>
-    </article>
-
-    <article class="episode-card" data-episode="ep2">
-      <div class="ep-head">
-        <div class="ep-num">EP 02</div>
-        <div>
-          <h3>高敏感，不是你太脆弱：把細膩活成力量</h3>
-          <p class="ep-meta">單人主持 · 普通話 · 15 分 22 秒</p>
-        </div>
-      </div>
-      <audio controls preload="metadata" src="assets/ep2.mp3"></audio>
-      <div class="ep-quote">
-        <p>「敏感不是一個需要被消除的自己。」</p>
-        <span>—— 第二集結尾，留給自己的提醒</span>
-      </div>
-      <h4 class="chapter-heading">第二集章節</h4>
-      <ol class="chapter-list episode-chapters" data-chapters="ep2"></ol>
-    </article>
+    <p class="sec-sub">選擇一集，進入屬於這個主題的對話。</p>
+    <div class="episode-grid" id="episodeIndex"></div>
   </div>
 </section>
 
@@ -124,6 +91,7 @@
   </div>
 </footer>
 
+<script src="episodes.js"></script>
 <script src="app.js"></script>
 </body>
 </html>
